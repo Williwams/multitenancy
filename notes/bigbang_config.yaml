@@ -1,0 +1,105 @@
+elasticsearchKibana:
+  values:
+    kibana:
+      count: 1
+      resources:
+        requests:
+          cpu: 400m
+          memory: 1Gi
+        limits:
+          cpu: null  # nonexistent cpu limit results in faster spin up
+          memory: null
+    elasticsearch:
+      master:
+        count: 1
+        resources:
+          requests:
+            cpu: 400m
+            memory: 2Gi
+          limits:
+            cpu: null
+            memory: null
+      data:
+        count: 1
+        resources:
+          requests:
+            cpu: 400m
+            memory: 2Gi
+          limits:
+            cpu: null
+            memory: null
+
+clusterAuditor:
+  values:
+    resources:
+      requests:
+        cpu: 400m
+        memory: 2Gi
+      limits:
+        cpu: null
+        memory: null
+
+gatekeeper:
+  enabled: false
+  values:
+    replicas: 1
+    controllerManager:
+      resources:
+        requests:
+          cpu: 100m
+          memory: 512Mi
+        limits:
+          cpu: null
+          memory: null
+    audit:
+      resources:
+        requests:
+          cpu: 400m
+          memory: 768Mi
+        limits:
+          cpu: null
+          memory: null
+    violations:
+      allowedDockerRegistries:
+        enforcementAction: dryrun
+
+istio:
+  values:
+    values: # possible values found here https://istio.io/v1.5/docs/reference/config/installation-options (ignore 1.5, latest docs point here)
+      global: # global istio operator values
+        proxy: # mutating webhook injected istio sidecar proxy's values
+          resources:
+            requests:
+              cpu: 0m # null get ignored if used here
+              memory: 0Mi
+            limits:
+              cpu: 0m
+              memory: 0Mi
+
+twistlock:
+  enabled: false # twistlock requires a license to work, so we're disabling it
+
+# to set all Kyverno policies to audit only
+kyvernoPolicies:
+  enabled: false
+  values:
+    validationFailureAction: "audit"
+kyverno:
+  enabled: false
+kyvernoReporter:
+  enabled: false
+# under Neuvector section
+neuvector:
+  enabled: false
+  values:
+    k3s:
+      enabled: true
+#addons:
+  #gitlab:
+    #enabled: true
+  #harbor:
+    #enabled: true
+  #mattermost:
+    #enabled: true
+  #mattermostOperator:
+    #enabled: true
